@@ -13,9 +13,9 @@ buildscript {
     }
 }
 
-apply plugin: 'application'
-apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 
@@ -28,10 +28,11 @@ repositories {
     mavenCentral()
 }
 
+ 
 dependencies {
-
-	
-   
+ 	 compile project(':dropwizard-jobs-core')
+ 	 compile project(':dropwizard-jobs-guice')
+ 	 compile project(':dropwizard-jobs-spring')
 }
 
 
