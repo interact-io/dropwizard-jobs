@@ -1,0 +1,3 @@
+rootProject.name = 'dropwizard-jobs-guice'
+include(':dropwizard-jobs-core')
+project (':dropwizard-jobs-core').setProjectDir(new File('../dropwizard-jobs-core'))
