@@ -21,11 +21,15 @@ apply plugin: 'jacoco'
 
 mainClassName = ''
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.8"
 }
 
  
@@ -48,8 +52,8 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'jacoco'
 	
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+	sourceCompatibility = 11
+	targetCompatibility = 11
 	
     ext {
 	 	DROPWIZARD_VERSION = '2.0.33'
