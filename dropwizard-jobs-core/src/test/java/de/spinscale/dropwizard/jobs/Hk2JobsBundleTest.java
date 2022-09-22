@@ -1,6 +1,9 @@
 package de.spinscale.dropwizard.jobs;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -61,7 +64,7 @@ public class Hk2JobsBundleTest {
         when(container.getConfiguration()).thenReturn(resourceConfig);
 
         // verify precondition
-        assertThat(instance.getScheduler()).isNull();
+        assertThat(instance.getScheduler(), nullValue());
 
         // startup container
         applicationHandler.onStartup(container);
@@ -72,18 +75,18 @@ public class Hk2JobsBundleTest {
         final List<AbstractJob> jobs = (List<AbstractJob>) serviceLocator.getAllServices(searchCriteria);
         AbstractJob applicationStartTestJob = getJob(jobs, ApplicationStartTestJob.class);
         AbstractJob applicationStopTestJob = getJob(jobs, ApplicationStopTestJob.class);
-        assertThat(jobs).hasSize(2);
-        assertThat(applicationStartTestJob.latch().getCount()).isEqualTo(0);
-        assertThat(applicationStopTestJob.latch().getCount()).isEqualTo(1);
-        assertThat(instance.getScheduler().isStarted()).isTrue();
+        assertThat(jobs, hasSize(2));
+        assertThat(applicationStartTestJob.latch().getCount(), equalTo(0L));
+        assertThat(applicationStopTestJob.latch().getCount(), equalTo(1L));
+        assertThat(instance.getScheduler().isStarted(), equalTo(true));
 
         // shutdown container
         applicationHandler.onShutdown(container);
         Thread.sleep(1000);
 
         // verify at shutdown
-        assertThat(applicationStopTestJob.latch().getCount()).isEqualTo(0);
-        assertThat(instance.getScheduler().isShutdown()).isTrue();
+        assertThat(applicationStopTestJob.latch().getCount(), equalTo(0L));
+        assertThat(instance.getScheduler().isShutdown(), equalTo(true));
     }
 
     /**
