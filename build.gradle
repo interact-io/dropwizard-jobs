@@ -52,7 +52,7 @@ subprojects {
 	targetCompatibility = 1.8
 	
     ext {
-	 	DROPWIZARD_VERSION = '1.2.0'
+	 	DROPWIZARD_VERSION = '2.0.33'
 	 	SPRING_VERSION = '4.3.12.RELEASE'
 	 	GUICE_VERSION = '4.1.0'
 	 	QUARTZ_VERSION = '2.3.0'
@@ -61,6 +61,7 @@ subprojects {
     dependencies {
 	 	compile "io.dropwizard:dropwizard-core:${DROPWIZARD_VERSION}"
 	 	compile "org.quartz-scheduler:quartz:${QUARTZ_VERSION}"
+	 	testCompile 'org.assertj:assertj-core:3.11.1'
 	 	testCompile 'org.hamcrest:hamcrest-all:1.3'
 	 	testCompile 'junit:junit:4.12'
 	 	testCompile "io.dropwizard:dropwizard-testing:${DROPWIZARD_VERSION}"

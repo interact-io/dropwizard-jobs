@@ -2,15 +2,16 @@ package de.spinscale.dropwizard.jobs;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.codahale.metrics.MetricRegistry;
-import io.dropwizard.jersey.DropwizardResourceConfig;
-import io.dropwizard.jersey.setup.JerseyEnvironment;
-import io.dropwizard.setup.Environment;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.inject.Singleton;
+
 import org.glassfish.hk2.api.Filter;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.BuilderHelper;
@@ -20,10 +21,11 @@ import org.glassfish.jersey.server.spi.AbstractContainerLifecycleListener;
 import org.glassfish.jersey.server.spi.Container;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import com.codahale.metrics.MetricRegistry;
 
-import javax.inject.Singleton;
+import io.dropwizard.jersey.DropwizardResourceConfig;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
+import io.dropwizard.setup.Environment;
 
 public class Hk2JobsBundleTest {
 
@@ -31,7 +33,8 @@ public class Hk2JobsBundleTest {
     private final Environment environment = mock(Environment.class);
 
     /**
-     * A test case for the {@link Hk2JobsBundle#run(JobConfiguration, Environment)} and
+     * A test case for the
+     * {@link Hk2JobsBundle#run(JobConfiguration, Environment)} and
      * {@link Hk2JobsBundle#getScheduler()}.
      */
     @Test
@@ -52,7 +55,7 @@ public class Hk2JobsBundleTest {
             }
         });
         final ApplicationHandler applicationHandler = new ApplicationHandler(resourceConfig);
-        final ServiceLocator serviceLocator = applicationHandler.getServiceLocator();
+        final ServiceLocator serviceLocator = applicationHandler.getInjectionManager().getInstance(ServiceLocator.class);
         final Container container = mock(Container.class);
         when(container.getApplicationHandler()).thenReturn(applicationHandler);
         when(container.getConfiguration()).thenReturn(resourceConfig);
@@ -84,7 +87,8 @@ public class Hk2JobsBundleTest {
     }
 
     /**
-     * A test case for the {@link JobManager#start()} and {@link JobManager#stop()} that raise exception.
+     * A test case for the {@link JobManager#start()} and
+     * {@link JobManager#stop()} that raise exception.
      */
     @Test
     public void testIllegalState() {
