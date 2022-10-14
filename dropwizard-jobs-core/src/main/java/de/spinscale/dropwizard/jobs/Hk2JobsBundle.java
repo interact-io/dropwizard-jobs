@@ -1,6 +1,8 @@
 package de.spinscale.dropwizard.jobs;
 
-import io.dropwizard.setup.Environment;
+import java.util.List;
+import java.util.Objects;
+
 import org.glassfish.hk2.api.Filter;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.spi.AbstractContainerLifecycleListener;
@@ -8,11 +10,11 @@ import org.glassfish.jersey.server.spi.Container;
 import org.quartz.Scheduler;
 import org.quartz.spi.JobFactory;
 
-import java.util.List;
-import java.util.Objects;
+import io.dropwizard.setup.Environment;
 
 /**
- * A {@link JobsBundle} implementation that uses HK2 to instantiate a {@link Job}.
+ * A {@link JobsBundle} implementation that uses HK2 to instantiate a
+ * {@link Job}.
  * 
  * <p>
  * Example of usage:
@@ -50,9 +52,10 @@ public class Hk2JobsBundle extends JobsBundle {
      * Create a new instance with given HK2 search criteria.
      * 
      * <p>
-     * You can implement your own {@code Filter} or you can use one of the {@code Filter} implementations provided by
-     * {@code BuilderHelper}. The most common case is to use an {@code IndexedFilter} provided by {@code BuilderHelper},
-     * like this:
+     * You can implement your own {@code Filter} or you can use one of the
+     * {@code Filter} implementations provided by {@code BuilderHelper}. The
+     * most common case is to use an {@code IndexedFilter} provided by
+     * {@code BuilderHelper}, like this:
      * </p>
      * 
      * <pre>
@@ -60,8 +63,10 @@ public class Hk2JobsBundle extends JobsBundle {
      * bootstrap.addBundle(new Hk2JobsBundle(jobFilter));
      * </pre>
      * 
-     * @param searchCriteria the returned {@link Job} service will match the Filter (in other words,
-     *            searchCriteria.matches returns true). Should not be null.
+     * @param searchCriteria
+     *            the returned {@link Job} service will match the Filter (in
+     *            other words, searchCriteria.matches returns true). Should not
+     *            be null.
      */
     public Hk2JobsBundle(final Filter searchCriteria) {
         Objects.requireNonNull(searchCriteria);
@@ -73,8 +78,10 @@ public class Hk2JobsBundle extends JobsBundle {
         environment.jersey().register(new AbstractContainerLifecycleListener() {
             @Override
             public void onStartup(Container container) {
-                final ServiceLocator locator = container.getApplicationHandler().getServiceLocator();
-                // TODO: Avoid useless Job instantiation. Note: Same as GuiceJobManager and SpringJobManager.
+                final ServiceLocator locator = container.getApplicationHandler().getInjectionManager()
+                        .getInstance(ServiceLocator.class);
+                // TODO: Avoid useless Job instantiation. Note: Same as
+                // GuiceJobManager and SpringJobManager.
                 @SuppressWarnings("unchecked")
                 final List<Job> jobs = (List<Job>) locator.getAllServices(searchCriteria);
                 jobManager = new JobManager(configuration, jobs.toArray(new Job[jobs.size()])) {
