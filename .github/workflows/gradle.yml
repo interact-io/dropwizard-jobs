@@ -9,12 +9,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
         ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - name: Cache
-      uses: actions/cache@v1
+      uses: actions/cache@v4
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
